@@ -436,6 +436,12 @@ def _compile_kernel(abs_ins, kernel, platform: str, **kwargs):
 
 
 def _taichi_mlir_cpu_translation_rule(kernel, c, *ins, **kwargs):
+  if cpu_ops is None:
+    raise RuntimeError(
+      'The CPU kernels do not build correctly. '
+      'Please check the installation of braintaichi.'
+    )
+
   in_out_info = _compile_kernel(c.avals_in, kernel, 'cpu', **kwargs)
   ins = [mlir.ir_constant(v) for v in in_out_info] + list(ins)
   input_layouts = [_shape_to_layout(arr.shape) for arr in in_out_info] + [_shape_to_layout(a.shape) for a in
@@ -463,6 +469,11 @@ def _taichi_mlir_cpu_translation_rule(kernel, c, *ins, **kwargs):
 
 
 def _taichi_mlir_gpu_translation_rule(kernel, c, *ins, **kwargs):
+  if gpu_ops is None:
+    raise RuntimeError(
+      'The GPU kernels are not supported on this device. '
+      'Please install the GPU supported version of braintaichi.'
+    )
   opaque = _compile_kernel(c.avals_in, kernel, 'gpu', **kwargs)
   input_layouts = [_shape_to_layout(a.shape) for a in c.avals_in]
   result_types = [mlir.aval_to_ir_type(out) for out in c.avals_out]
@@ -479,22 +490,10 @@ def _taichi_mlir_gpu_translation_rule(kernel, c, *ins, **kwargs):
 
 
 def register_taichi_aot_mlir_cpu_translation_rule(primitive, cpu_kernel):
-  if cpu_ops is None:
-    raise RuntimeError(
-      'The CPU kernels do not build correctly. '
-      'Please check the installation of braintaichi.'
-    )
-
   rule = partial(_taichi_mlir_cpu_translation_rule, cpu_kernel)
   mlir.register_lowering(primitive, rule, platform='cpu')
 
 
 def register_taichi_aot_mlir_gpu_translation_rule(primitive, gpu_kernel):
-  if gpu_ops is None:
-    raise RuntimeError(
-      'The GPU kernels are not supported on this device. '
-      'Please install the GPU supported version of braintaichi.'
-    )
-
   rule = partial(_taichi_mlir_gpu_translation_rule, gpu_kernel)
   mlir.register_lowering(primitive, rule, platform='gpu')
