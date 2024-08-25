@@ -31,15 +31,15 @@ requires = [
     "pybind11",
     "setuptools_scm[toml]>=3.4",
     "cmake",
-    "taichi==1.7.2",
+    "taichi",
 ]
 
 build-backend = "setuptools.build_meta"
 
 [project]
-requires-python = ">=3.8,<=3.12"
-name = "brainpylib"
-version = "0.3.2"
+requires-python = "==3.11"
+name = "braintaichi"
+version = "0.0.1"
 
 [tool.cibuildwheel.linux]
 before-all = "sh prepare_build_wheel_on_cuda.sh"
@@ -48,16 +48,16 @@ before-build = "sh copy_so_linux.sh"
 archs = ["x86_64"]
 skip = ["pp*", "*-musllinux_x86_64"]
 repair-wheel-command = """
-    export LD_LIBRARY_PATH=/project/brainpylib:$LD_LIBRARY_PATH &&
+    export LD_LIBRARY_PATH=/project/braintaichi:$LD_LIBRARY_PATH &&
     auditwheel repair -w {dest_dir} {wheel}
 """
 
 [tool.cibuildwheel.macos]
 before-build = "sh copy_so_macOS.sh"
-archs = ["x86_64", "arm64"]
+archs = ["x86_64"]
 skip = ["pp*"]
 repair-wheel-command = """
-    export LD_LIBRARY_PATH=/project/brainpylib:$LD_LIBRARY_PATH &&
+    export LD_LIBRARY_PATH=/project/braintaichi:$LD_LIBRARY_PATH &&
     delocate-wheel -w {dest_dir} -v {wheel}
 """
 
@@ -65,6 +65,6 @@ repair-wheel-command = """
 before-build = "copy_dll_windows.bat"
 archs = ["AMD64", "x86"]
 repair-wheel-command = """
-    set PATH=brainpylib;%PATH% && delvewheel repair -w {dest_dir} {wheel}
+    set PATH=braintaichi;%PATH% && delvewheel repair -w {dest_dir} {wheel}
 """
 skip = ["pp*", "*-win32"]
