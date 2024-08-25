@@ -8,5 +8,5 @@ python copy_so_macOS.py
 source project/set_env.sh
 cp "$taichi_runtime_lib_dir"/libtaichi_c_api.dylib project/braintaichi/
 
-ll project/braintaichi/
+ls project/braintaichi/
 
