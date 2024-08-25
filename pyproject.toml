@@ -21,7 +21,7 @@ description = "Integrating Taichi Lang into Brain Dynamics Programming."
 readme = 'README.md'
 license = { text = 'Apache-2.0 license' }
 requires-python = '>=3.9'
-authors = [{ name = 'BrainPy Team', email = 'chao.brain@qq.com' }]
+authors = [{ name = 'BrainTaichi Team', email = 'chao.brain@qq.com' }]
 classifiers = [
     'Natural Language :: English',
     'Operating System :: OS Independent',
@@ -42,13 +42,13 @@ classifiers = [
 ]
 
 
-keywords = ["BrainPy", "brain simulation", "brain-inspired computing"]
+keywords = ["brain simulation", "brain dynamics", "brain-inspired computing", "event-driven computation", "neuromorphic computing"]
 
 dependencies = [
     'jax',
     'jaxlib',
     'numpy',
-    'braincore',
+    'brainunit',
 ]
 
 dynamic = ['version']
@@ -57,8 +57,8 @@ dynamic = ['version']
 name = "braintaichi"
 
 [project.urls]
-homepage = 'http://github.com/brainpy/braintaichi'
-repository = 'http://github.com/brainpy/braintaichi'
+homepage = 'http://github.com/chaoming0625/braintaichi'
+repository = 'http://github.com/chaoming0625/braintaichi'
 
 [project.optional-dependencies]
 testing = [
