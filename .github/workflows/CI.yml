@@ -47,6 +47,8 @@ jobs:
           python -m pip cache purge
           python -m pip install --upgrade pip setuptools  --no-cache-dir
           python -m pip install -r requirements-dev.txt  --no-cache-dir
+          pip install -U wheel
+          pip install -U taichi
           pip install . --no-cache-dir
       - name: Test with pytest
         run: |
