@@ -16,9 +16,7 @@
 # -*- coding: utf-8 -*-
 
 
-from __future__ import annotations
-
-from typing import Tuple
+from typing import Tuple, Union
 
 import brainunit as u
 import jax
@@ -33,7 +31,7 @@ from ._sparse_utils import csr_to_coo
 
 
 def raw_csrmv_taichi(
-    data: jax.typing.ArrayLike | u.Quantity,
+    data: Union[jax.typing.ArrayLike, u.Quantity],
     indices: jax.typing.ArrayLike,
     indptr: jax.typing.ArrayLike,
     vector: jax.typing.ArrayLike,

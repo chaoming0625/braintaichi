@@ -15,9 +15,7 @@
 
 # -*- coding: utf-8 -*-
 
-from __future__ import annotations
-
-from typing import Tuple
+from typing import Tuple, Union
 
 import brainunit as u
 import jax
@@ -32,7 +30,7 @@ from braintaichi._primitive._xla_custom_op import XLACustomOp
 
 
 def raw_csrmm_taichi(
-    data: jax.typing.ArrayLike | u.Quantity,
+    data: Union[jax.typing.ArrayLike, u.Quantity],
     indices: jax.typing.ArrayLike,
     indptr: jax.typing.ArrayLike,
     matrix: jax.typing.ArrayLike,

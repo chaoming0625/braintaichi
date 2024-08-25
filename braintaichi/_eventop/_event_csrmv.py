@@ -25,8 +25,6 @@ Key points for the operator customization:
 
 """
 
-from __future__ import annotations
-
 from typing import Union, Tuple
 
 import jax

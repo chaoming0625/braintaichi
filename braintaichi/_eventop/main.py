@@ -14,8 +14,6 @@
 # ==============================================================================
 
 
-from __future__ import annotations
-
 from typing import Union, Tuple
 
 import brainunit as u
@@ -33,7 +31,7 @@ __all__ = [
 
 
 def event_csrmm(
-    data: jax.typing.ArrayLike | u.Quantity,
+    data: Union[jax.typing.ArrayLike, u.Quantity],
     indices: jax.typing.ArrayLike,
     indptr: jax.typing.ArrayLike,
     matrix: jax.typing.ArrayLike,
@@ -61,7 +59,7 @@ def event_csrmm(
 
 
 def event_csrmv(
-    data: Union[float, jax.Array],
+    data: Union[jax.typing.ArrayLike, u.Quantity],
     indices: jax.Array,
     indptr: jax.Array,
     events: jax.Array,

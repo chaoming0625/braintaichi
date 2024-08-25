@@ -13,10 +13,7 @@
 # limitations under the License.
 # ==============================================================================
 
-
-from __future__ import annotations
-
-from typing import Tuple
+from typing import Tuple, Union
 
 import brainunit as u
 import jax
@@ -36,7 +33,7 @@ __all__ = [
 
 @set_module_as('braintaichi')
 def coomv(
-    data: jax.typing.ArrayLike | u.Quantity,
+    data: Union[jax.typing.ArrayLike, u.Quantity],
     row: jax.typing.ArrayLike,
     col: jax.typing.ArrayLike,
     vector: jax.typing.ArrayLike,
@@ -110,7 +107,7 @@ def coomv(
 
 @set_module_as('braintaichi')
 def csrmm(
-    data: jax.typing.ArrayLike | u.Quantity,
+    data: Union[jax.typing.ArrayLike, u.Quantity],
     indices: jax.typing.ArrayLike,
     indptr: jax.typing.ArrayLike,
     matrix: jax.typing.ArrayLike,
@@ -140,7 +137,7 @@ def csrmm(
 
 @set_module_as('braintaichi')
 def csrmv(
-    data: jax.typing.ArrayLike | u.Quantity,
+    data: Union[jax.typing.ArrayLike, u.Quantity],
     indices: jax.typing.ArrayLike,
     indptr: jax.typing.ArrayLike,
     vector: jax.typing.ArrayLike,
