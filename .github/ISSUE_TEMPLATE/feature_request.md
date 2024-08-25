@@ -1,6 +1,6 @@
 ---
 name: 'Feature Request'
-about: 'Suggest a new idea or improvement for braintaichi'
+about: 'Suggest a new idea or improvement for ``braintaichi``'
 labels: 'enhancement'
 ---
 

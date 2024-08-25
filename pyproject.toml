@@ -1,66 +1,69 @@
+[tool.cibuildwheel]
+build = "*"
+skip = ""
+test-skip = ""
+
+archs = ["auto"]
+build-frontend = "pip"
+config-settings = {}
+dependency-versions = "pinned"
+environment = {}
+environment-pass = []
+build-verbosity = 1
+
+before-all = ""
+repair-wheel-command = ""
+
+test-command = ""
+before-test = ""
+test-requires = []
+test-extras = []
+
+container-engine = "docker"
+
+manylinux-x86_64-image = "manylinux2014"
+
 [build-system]
-requires = ["setuptools", "numpy", 'jax', 'jaxlib', 'braincore']
+requires = [
+    "setuptools",
+    "wheel",
+    "Cython",
+    "pybind11",
+    "setuptools_scm[toml]>=3.4",
+    "cmake",
+]
+
 build-backend = "setuptools.build_meta"
 
-
-[tool.setuptools.packages.find]
-exclude = [
-    "docs*", "tests*", "examples*", "build*", "dist*",
-    "braintaichi.egg-info*", "braintaichi/__pycache__*",
-    "braintaichi/__init__.py"
-]
-
-
-[tool.distutils.bdist_wheel]
-universal = true
-
-
 [project]
+requires-python = ">=3.9"
 name = "braintaichi"
-description = "Integrating Taichi Lang into Brain Dynamics Programming."
-readme = 'README.md'
-license = { text = 'Apache-2.0 license' }
-requires-python = '>=3.9'
-authors = [{ name = 'BrainPy Team', email = 'chao.brain@qq.com' }]
-classifiers = [
-    'Natural Language :: English',
-    'Operating System :: OS Independent',
-    'Development Status :: 4 - Beta',
-    'Intended Audience :: Developers',
-    'Intended Audience :: Science/Research',
-    'Programming Language :: Python :: 3',
-    'Programming Language :: Python :: 3.9',
-    'Programming Language :: Python :: 3.10',
-    'Programming Language :: Python :: 3.11',
-    'Programming Language :: Python :: 3.12',
-    'License :: OSI Approved :: Apache Software License',
-    'Programming Language :: Python',
-    'Topic :: Scientific/Engineering :: Bio-Informatics',
-    'Topic :: Scientific/Engineering :: Mathematics',
-    'Topic :: Scientific/Engineering :: Artificial Intelligence',
-    'Topic :: Software Development :: Libraries',
-]
+version = "0.0.1"
 
+[tool.cibuildwheel.linux]
+before-all = "sh prepare_build_wheel_on_cuda.sh"
+before-build = "sh copy_so_linux.sh"
+#before-build = "pip install -r requirements-test.txt"
+archs = ["x86_64"]
+skip = ["pp*", "*-musllinux_x86_64"]
+repair-wheel-command = """
+    export LD_LIBRARY_PATH=/project/braintaichi:$LD_LIBRARY_PATH &&
+    auditwheel repair -w {dest_dir} {wheel}
+"""
 
-keywords = ["BrainPy", "brain simulation", "brain-inspired computing"]
+[tool.cibuildwheel.macos]
+before-build = "sh copy_so_macOS.sh"
+archs = ["x86_64", "arm64"]
+skip = ["pp*"]
+repair-wheel-command = """
+    export LD_LIBRARY_PATH=/project/braintaichi:$LD_LIBRARY_PATH &&
+    delocate-wheel -w {dest_dir} -v {wheel}
+"""
 
-dependencies = [
-    'jax',
-    'jaxlib',
-    'numpy',
-    'braincore',
-]
-
-dynamic = ['version']
-
-[tool.flit.module]
-name = "braintaichi"
-
-[project.urls]
-homepage = 'http://github.com/brainpy/braintaichi'
-repository = 'http://github.com/brainpy/braintaichi'
-
-[project.optional-dependencies]
-testing = [
-    'pytest',
-]
+[tool.cibuildwheel.windows]
+before-build = "copy_dll_windows.bat"
+archs = ["AMD64", "x86"]
+repair-wheel-command = """
+    set PATH=braintaichi;%PATH% && delvewheel repair -w {dest_dir} {wheel}
+"""
+skip = ["pp*", "*-win32"]
