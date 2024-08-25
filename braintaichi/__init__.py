@@ -22,7 +22,7 @@ __all__ = [
 ]
 
 __version__ = "0.0.1"
-__minimal_taichi_version__ = (1, 8, 0)
+__minimal_taichi_version__ = (1, 7, 2)
 
 import ctypes
 import os

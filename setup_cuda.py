@@ -24,7 +24,7 @@ except ModuleNotFoundError:
     )
 
 
-__minimal_taichi_version = (1, 8, 0)
+__minimal_taichi_version = (1, 7, 2)
 
 try:
     import taichi as ti
@@ -93,6 +93,9 @@ class CMakeBuildExt(build_ext):
             "-DPYTHON_INCLUDE_DIRS={}".format(sysconfig.get_python_inc()),
             "-DPYTHON_INCLUDE_DIR={}".format(sysconfig.get_python_inc()),
             "-DCMAKE_INSTALL_PREFIX={}".format(install_dir),
+            # CMake 中找不到 CUDA_CUDA_LIBRARY
+            # 解决方案: https://blog.csdn.net/comedate/article/details/128334923
+            "-DCMAKE_LIBRARY_PATH=/usr/local/cuda/lib64/stubs",
             "-DPython_EXECUTABLE={}".format(sys.executable),
             "-DPython_LIBRARIES={}".format(cmake_python_library),
             "-DPython_INCLUDE_DIRS={}".format(cmake_python_include_dir),
@@ -160,7 +163,7 @@ setup(
     package_data={
         'braintaichi': ['*.so']
     },
-    install_requires=['brainunit', 'brainstate', 'taichi', 'jax'],
+    install_requires=['brainunit', 'brainstate', 'jax', 'jaxlib', 'taichi'],
     extras_require={"test": "pytest"},
     python_requires='>=3.9',
     url='https://github.com/chaoming0625/braintaichi',

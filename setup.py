@@ -24,7 +24,7 @@ except ModuleNotFoundError:
 from pybind11.setup_helpers import Pybind11Extension
 
 
-__minimal_taichi_version = (1, 8, 0)
+__minimal_taichi_version = (1, 7, 2)
 
 try:
     import taichi as ti
@@ -149,7 +149,7 @@ setup(
     author_email='chao.brain@qq.com',
     packages=find_namespace_packages(exclude=['lib*', 'docs*', 'tests*', 'win_dll*', 'out*', 'cmake*', 'scripts*']),
     include_package_data=True,
-    install_requires=['brainunit', 'brainstate', 'taichi', 'jax'],
+    install_requires=['brainunit', 'brainstate', 'jax', 'jaxlib', 'taichi'],
     extras_require={"test": "pytest"},
     python_requires='>=3.9',
     url='https://github.com/chaoming0625/braintaichi',
