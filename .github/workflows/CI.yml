@@ -79,7 +79,7 @@ jobs:
           python -m pip install --upgrade pip setuptools --no-cache-dir
           python -m pip install -r requirements-dev.txt  --no-cache-dir
           pip install cibuildwheel 
-          sh copy_pyproject.sh
+          sh copy_pyproject_mac_x86_64.sh
           cibuildwheel --platform macos
           pip install dist/*
       - name: Test with pytest
