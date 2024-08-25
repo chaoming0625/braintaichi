@@ -22,7 +22,7 @@ def test_example1():
   events = bst.random.random((1000,)) < 0.1
 
   # Create a sparse matrix
-  r = bti.event_mv_prob_homo(events, 1., conn_prob=0.1, shape=(1000, 1000), seed=123)
+  r = bti.jitc_event_mv_prob_homo(events, 1., conn_prob=0.1, shape=(1000, 1000), seed=123)
   print(r.shape)
   print(r)
 

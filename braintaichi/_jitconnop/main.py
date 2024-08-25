@@ -26,17 +26,17 @@ from ._jit_csrmv import raw_mv_prob_homo, raw_mv_prob_uniform, raw_mv_prob_norma
 from ._jit_event_csrmv import raw_event_mv_prob_homo, raw_event_mv_prob_uniform, raw_event_mv_prob_normal
 
 __all__ = [
-  'mv_prob_homo',
-  'mv_prob_uniform',
-  'mv_prob_normal',
-  'event_mv_prob_homo',
-  'event_mv_prob_uniform',
-  'event_mv_prob_normal',
+  'jitc_mv_prob_homo',
+  'jitc_mv_prob_uniform',
+  'jitc_mv_prob_normal',
+  'jitc_event_mv_prob_homo',
+  'jitc_event_mv_prob_uniform',
+  'jitc_event_mv_prob_normal',
 ]
 
 
 @set_module_as('braintaichi')
-def mv_prob_homo(
+def jitc_mv_prob_homo(
     vector: jax.typing.ArrayLike,
     weight: float,
     conn_prob: float,
@@ -110,7 +110,7 @@ def mv_prob_homo(
 
 
 @set_module_as('braintaichi')
-def mv_prob_uniform(
+def jitc_mv_prob_uniform(
     vector: jax.Array,
     w_low: float,
     w_high: float,
@@ -187,7 +187,7 @@ def mv_prob_uniform(
 
 
 @set_module_as('braintaichi')
-def mv_prob_normal(
+def jitc_mv_prob_normal(
     vector: jax.Array,
     w_mu: float,
     w_sigma: float,
@@ -264,7 +264,7 @@ def mv_prob_normal(
 
 
 @set_module_as('braintaichi')
-def event_mv_prob_homo(
+def jitc_event_mv_prob_homo(
     events: jax.Array,
     weight: float,
     conn_prob: float,
@@ -290,11 +290,11 @@ def event_mv_prob_homo(
                                 outdim_parallel=outdim_parallel)[0]
 
 
-event_mv_prob_homo.__doc__ = mv_prob_homo.__doc__
+jitc_event_mv_prob_homo.__doc__ = jitc_mv_prob_homo.__doc__
 
 
 @set_module_as('braintaichi')
-def event_mv_prob_uniform(
+def jitc_event_mv_prob_uniform(
     events: jax.Array,
     w_low: float,
     w_high: float,
@@ -320,11 +320,11 @@ def event_mv_prob_uniform(
                                    transpose=transpose, outdim_parallel=outdim_parallel)[0]
 
 
-event_mv_prob_uniform.__doc__ = mv_prob_uniform.__doc__
+jitc_event_mv_prob_uniform.__doc__ = jitc_mv_prob_uniform.__doc__
 
 
 @set_module_as('braintaichi')
-def event_mv_prob_normal(
+def jitc_event_mv_prob_normal(
     events: jax.Array,
     w_mu: float,
     w_sigma: float,
@@ -350,4 +350,4 @@ def event_mv_prob_normal(
                                   transpose=transpose, outdim_parallel=outdim_parallel)[0]
 
 
-event_mv_prob_normal.__doc__ = mv_prob_normal.__doc__
+jitc_event_mv_prob_normal.__doc__ = jitc_mv_prob_normal.__doc__
