@@ -31,12 +31,13 @@ requires = [
     "pybind11",
     "setuptools_scm[toml]>=3.4",
     "cmake",
+    "taichi",
 ]
 
 build-backend = "setuptools.build_meta"
 
 [project]
-requires-python = ">=3.9"
+requires-python = ">=3.8, <=3.12"
 name = "braintaichi"
 version = "0.0.1"
 

@@ -28,7 +28,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ "3.9", "3.10", "3.11", ]
+        python-version: [ "3.9", "3.10", "3.11", "3.12"]
 
     steps:
       - name: Cancel Previous Runs
@@ -59,7 +59,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ "3.9", "3.10", "3.11", ]
+        python-version: [ "3.9", "3.10", "3.11", "3.12"]
 
     steps:
       - name: Cancel Previous Runs
@@ -79,6 +79,7 @@ jobs:
           python -m pip install --upgrade pip setuptools --no-cache-dir
           python -m pip install -r requirements-dev.txt  --no-cache-dir
           pip install cibuildwheel 
+          sh set_CIBW_BUILD.sh
           cibuildwheel --platform macos
           pip install dist/*
       - name: Test with pytest
@@ -91,7 +92,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ "3.9", "3.10", "3.11", ]
+        python-version: [ "3.9", "3.10", "3.11", "3.12"]
 
     steps:
       - name: Cancel Previous Runs
