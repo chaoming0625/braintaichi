@@ -57,7 +57,6 @@ extensions = [
   'sphinx.ext.viewcode',
   'sphinx_autodoc_typehints',
   'myst_nb',
-  'matplotlib.sphinxext.plot_directive',
   'sphinx_thebe',
   'sphinx_design'
 ]
