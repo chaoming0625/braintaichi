@@ -15,6 +15,8 @@
 
 # -*- coding: utf-8 -*-
 
+from __future__ import annotations
+
 import contextlib
 import hashlib
 import inspect
@@ -37,7 +39,7 @@ from ._batch_utils import _shape_to_layout
 
 # --- REGISTER CUSTOM CALL TARGETS on CPU platforms ###
 try:
-  from braintaichi import cpu_ops # noqa
+  from braintaichi import cpu_ops  # noqa
 
   for _name, _value in cpu_ops.registrations().items():
     xla_client.register_custom_call_target(_name, _value, platform="cpu")
@@ -46,7 +48,7 @@ except ImportError:
 
 # --- REGISTER CUSTOM CALL TARGETS on GPU platforms ###
 try:
-  from braintaichi import gpu_ops # noqa
+  from braintaichi import gpu_ops  # noqa
 
   for _name, _value in gpu_ops.registrations().items():
     xla_client.register_custom_call_target(_name, _value, platform="gpu")

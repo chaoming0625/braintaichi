@@ -15,6 +15,8 @@
 
 # -*- coding: utf-8 -*-
 
+from __future__ import annotations
+
 import warnings
 from functools import partial
 

@@ -13,6 +13,9 @@
 # limitations under the License.
 # ==============================================================================
 
+
+from __future__ import annotations
+
 from typing import Tuple
 
 import brainunit as u

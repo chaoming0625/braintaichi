@@ -15,6 +15,8 @@
 
 # -*- coding: utf-8 -*-
 
+from __future__ import annotations
+
 import brainstate as bst
 import jax
 import taichi as ti

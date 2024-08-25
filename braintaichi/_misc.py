@@ -15,6 +15,7 @@
 
 import jax
 
+
 def _get_dtype(v):
   if hasattr(v, 'dtype'):
     dtype = v.dtype
@@ -23,12 +24,9 @@ def _get_dtype(v):
   return dtype
 
 
-
 def set_module_as(name: str):
   def decorator(f):
     f.__module__ = name
     return f
 
   return decorator
-
-

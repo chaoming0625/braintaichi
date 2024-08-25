@@ -15,6 +15,8 @@
 
 # -*- coding: utf-8 -*-
 
+from __future__ import annotations
+
 from typing import Tuple
 
 import brainunit as u
@@ -29,6 +31,7 @@ from braintaichi._primitive._batch_utils import register_general_batching
 from braintaichi._primitive._xla_custom_op import XLACustomOp
 from braintaichi._sparseop._sparse_csrmm import raw_csrmm_taichi as normal_csrmm
 from braintaichi._sparseop._sparse_utils import csr_to_coo
+
 
 def raw_event_csrmm_taichi(
     data: jax.typing.ArrayLike | u.Quantity,

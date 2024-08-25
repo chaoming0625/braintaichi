@@ -15,6 +15,9 @@
 
 # -*- coding: utf-8 -*-
 
+
+from __future__ import annotations
+
 from typing import Tuple
 
 import brainunit as u

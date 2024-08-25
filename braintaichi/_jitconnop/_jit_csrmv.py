@@ -15,6 +15,8 @@
 
 # -*- coding: utf-8 -*-
 
+from __future__ import annotations
+
 import numbers
 from typing import Tuple, Optional
 
@@ -24,8 +26,8 @@ import taichi as ti
 from jax import numpy as jnp
 from jax.interpreters import ad
 
-from braintaichi._primitive._xla_custom_op import XLACustomOp
 from braintaichi._misc import _get_dtype, set_module_as
+from braintaichi._primitive._xla_custom_op import XLACustomOp
 from ._taichi_rand import (lfsr88_key, lfsr88_random_integers, lfsr88_uniform, lfsr88_normal)
 
 __all__ = [
@@ -33,7 +35,6 @@ __all__ = [
   'get_uniform_weight_matrix',
   'get_normal_weight_matrix'
 ]
-
 
 
 @set_module_as('braintaichi')

@@ -25,11 +25,12 @@ Key points for the operator customization:
 
 """
 
+from __future__ import annotations
+
 from typing import Union, Tuple
 
 import jax
 import jax.numpy as jnp
-import numpy as np
 import taichi as ti
 from jax.interpreters import ad
 

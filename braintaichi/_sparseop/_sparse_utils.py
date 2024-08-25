@@ -15,10 +15,11 @@
 
 # -*- coding: utf-8 -*-
 
+from __future__ import annotations
+
 import warnings
 from typing import Tuple
 
-import jax
 import numpy as np
 from jax import core, numpy as jnp
 from jax.interpreters import mlir, ad
@@ -31,7 +32,6 @@ __all__ = [
   'csr_to_coo',
   'csr_to_dense'
 ]
-
 
 
 def coo_to_csr(
