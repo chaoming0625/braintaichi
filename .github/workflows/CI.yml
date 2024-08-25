@@ -51,7 +51,7 @@ jobs:
           python setup.py install
       - name: Test with pytest
         run: |
-          pytest braintaichi/
+          pytest tests/
 
 
   test_macos:
@@ -82,7 +82,7 @@ jobs:
           python setup.py install
       - name: Test with pytest
         run: |
-          pytest braintaichi/
+          pytest tests/
 
 
   test_windows:
@@ -113,4 +113,4 @@ jobs:
           python setup.py install
       - name: Test with pytest
         run: |
-          pytest braintaichi/ -p no:faulthandler
+          pytest tests/ -p no:faulthandler
