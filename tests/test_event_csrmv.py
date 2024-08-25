@@ -15,11 +15,10 @@
 
 
 import brainstate as bst
-
 import braintaichi as bti
 
 
-def try_example1():
+def test_example1():
   events = bst.random.random((1000,)) < 0.1
 
   # Create a sparse matrix
@@ -28,5 +27,3 @@ def try_example1():
   print(r)
 
 
-if __name__ == '__main__':
-  try_example1()

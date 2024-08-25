@@ -27,7 +27,6 @@ import shutil
 from functools import partial
 from typing import Any, Sequence, Union
 
-import jax.core
 import numpy as np
 import taichi as ti
 from jax.interpreters import mlir
@@ -35,16 +34,24 @@ from jax.lib import xla_client
 from jaxlib.hlo_helpers import custom_call
 
 from ._batch_utils import _shape_to_layout
-from . import cpu_ops
-for _name, _value in cpu_ops.registrations().items():
-  xla_client.register_custom_call_target(_name, _value, platform="cpu")
+
+# --- REGISTER CUSTOM CALL TARGETS on CPU platforms ###
 try:
-  from . import gpu_ops
+  from braintaichi import cpu_ops  # noqa
+
+  for _name, _value in cpu_ops.registrations().items():
+    xla_client.register_custom_call_target(_name, _value, platform="cpu")
+except ImportError:
+  cpu_ops = None
+
+# --- REGISTER CUSTOM CALL TARGETS on GPU platforms ###
+try:
+  from braintaichi import gpu_ops  # noqa
+
   for _name, _value in gpu_ops.registrations().items():
     xla_client.register_custom_call_target(_name, _value, platform="gpu")
 except ImportError:
   gpu_ops = None
-
 
 taichi_cache_path = None
 
@@ -156,7 +163,7 @@ def is_metal_supported():
 
 # --- VARIABLES ###
 home_path = get_home_dir()
-kernels_aot_path = os.path.join(home_path, '.brainpy', 'kernels')
+kernels_aot_path = os.path.join(home_path, '.braintaichi', 'kernels')
 is_metal_device = is_metal_supported()
 
 
@@ -201,9 +208,11 @@ def _array_to_field(dtype, shape) -> Any:
   elif dtype == np.float64:
     dtype = ti.float64
   else:
-    raise NotImplementedError(f'Currently we do not support dtype {dtype} in Taichi. '
-                              f'If you think it is necessary, please open an issue at '
-                              f'https://github.com/brainpy/BrainPy/issues/new')
+    raise NotImplementedError(
+      f'Currently we do not support dtype {dtype} in Taichi. '
+      f'If you think it is necessary, please open an issue at '
+      f'https://github.com/chaoming0625/braintaichi/issues/new'
+    )
   return ti.field(dtype=dtype, shape=shape)
 
 
@@ -382,15 +391,6 @@ def _preprocess_kernel_call_gpu(
   return opaque
 
 
-def _XlaOp_to_ShapedArray(c, xla_op):
-  xla_op = c.get_shape(xla_op)
-  return jax.core.ShapedArray(xla_op.dimensions(), xla_op.element_type())
-
-
-def _mlir_to_ShapedArray(c, op):
-  return op
-
-
 def _kernel_to_code(kernel, abs_ins, abs_outs, platform):
   codes = f'[taichi {platform} kernel]\n' + get_source_with_dependencies(kernel)
   codes += '\n[ins]: {}'.format("-".join([f'{v.dtype}[{v.shape}]' for v in abs_ins]))
@@ -436,6 +436,12 @@ def _compile_kernel(abs_ins, kernel, platform: str, **kwargs):
 
 
 def _taichi_mlir_cpu_translation_rule(kernel, c, *ins, **kwargs):
+  if cpu_ops is None:
+    raise RuntimeError(
+      'The CPU kernels do not build correctly. '
+      'Please check the installation of braintaichi.'
+    )
+
   in_out_info = _compile_kernel(c.avals_in, kernel, 'cpu', **kwargs)
   ins = [mlir.ir_constant(v) for v in in_out_info] + list(ins)
   input_layouts = [_shape_to_layout(arr.shape) for arr in in_out_info] + [_shape_to_layout(a.shape) for a in
@@ -463,6 +469,11 @@ def _taichi_mlir_cpu_translation_rule(kernel, c, *ins, **kwargs):
 
 
 def _taichi_mlir_gpu_translation_rule(kernel, c, *ins, **kwargs):
+  if gpu_ops is None:
+    raise RuntimeError(
+      'The GPU kernels are not supported on this device. '
+      'Please install the GPU supported version of braintaichi.'
+    )
   opaque = _compile_kernel(c.avals_in, kernel, 'gpu', **kwargs)
   input_layouts = [_shape_to_layout(a.shape) for a in c.avals_in]
   result_types = [mlir.aval_to_ir_type(out) for out in c.avals_out]

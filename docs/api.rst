@@ -5,8 +5,7 @@ API Documentation
    :maxdepth: 1
 
    apis/changelog.md
-   apis/functional.rst
-   apis/init.rst
-   apis/metric.rst
-   apis/optim.rst
-
+   apis/operator-registration.rst
+   apis/sparse-operators.rst
+   apis/event-operators.rst
+   apis/jitconn-operators.rst

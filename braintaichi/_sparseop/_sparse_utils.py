@@ -18,35 +18,18 @@
 import warnings
 from typing import Tuple
 
-import jax
 import numpy as np
 from jax import core, numpy as jnp
 from jax.interpreters import mlir, ad
 from jaxlib import gpu_sparse
 
-from ._batch_utils import register_general_batching
+from braintaichi._primitive._batch_utils import register_general_batching
 
 __all__ = [
   'coo_to_csr',
   'csr_to_coo',
   'csr_to_dense'
 ]
-
-
-def _get_dtype(v):
-  if hasattr(v, 'dtype'):
-    dtype = v.dtype
-  else:
-    dtype = jax.dtypes.canonicalize_dtype(type(v))
-  return dtype
-
-
-def set_module_as(name: str):
-  def decorator(f):
-    f.__module__ = name
-    return f
-
-  return decorator
 
 
 def coo_to_csr(

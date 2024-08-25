@@ -16,122 +16,22 @@
 # -*- coding: utf-8 -*-
 
 
-from typing import Tuple, Optional
+from typing import Tuple
 
 import jax
-import numpy as np
 import taichi as ti
 from jax import numpy as jnp
 
-from ._base import XLACustomOp
-from ._jit_csrmv import (mv_prob_homo,
-                         mv_prob_uniform,
-                         mv_prob_normal,
-                         _general_checking,
+from braintaichi._misc import _get_dtype
+from braintaichi._primitive._xla_custom_op import XLACustomOp
+from ._jit_csrmv import (_general_checking,
                          raw_mv_prob_homo,
                          raw_mv_prob_uniform,
                          raw_mv_prob_normal,
                          _mv_prob_homo_transpose,
                          _mv_prob_uniform_transpose,
                          _mv_prob_normal_transpose)
-from ._sparse_utils import _get_dtype, set_module_as
 from ._taichi_rand import (lfsr88_key, lfsr88_random_integers, lfsr88_uniform, lfsr88_normal)
-
-__all__ = [
-  'event_mv_prob_homo',
-  'event_mv_prob_uniform',
-  'event_mv_prob_normal',
-]
-
-
-@set_module_as('braintaichi')
-def event_mv_prob_homo(
-    events: jax.Array,
-    weight: float,
-    conn_prob: float,
-    seed: Optional[int] = None,
-    *,
-    shape: Tuple[int, int],
-    transpose: bool = False,
-    outdim_parallel: bool = True,
-) -> jax.Array:
-  events = jnp.asarray(events)
-  weight = jnp.asarray(weight)
-  if jnp.ndim(weight) < 1:
-    weight = jnp.expand_dims(weight, axis=0)
-  conn_len = jnp.ceil(1 / conn_prob) * 2 - 1
-  conn_len = jnp.asarray(jnp.atleast_1d(conn_len), dtype=jnp.int32)
-  if seed is None:
-    with jax.ensure_compile_time_eval():
-      seed = np.random.randint(0, int(1e8), 1)
-  seed = jnp.atleast_1d(jnp.asarray(seed, dtype=jnp.uint32))
-  return raw_event_mv_prob_homo(events, weight, conn_len, seed,
-                                shape=shape,
-                                transpose=transpose,
-                                outdim_parallel=outdim_parallel)[0]
-
-
-event_mv_prob_homo.__doc__ = mv_prob_homo.__doc__
-
-
-@set_module_as('braintaichi')
-def event_mv_prob_uniform(
-    events: jax.Array,
-    w_low: float,
-    w_high: float,
-    conn_prob: float,
-    seed: Optional[int] = None,
-    *,
-    shape: Tuple[int, int],
-    transpose: bool = False,
-    outdim_parallel: bool = True,
-) -> jax.Array:
-  events = jnp.asarray(events)
-  if isinstance(w_low, float): w_low = jnp.asarray(w_low)
-  if isinstance(w_high, float): w_high = jnp.asarray(w_high)
-  w_low = jnp.atleast_1d(jnp.asarray(w_low))
-  w_high = jnp.atleast_1d(jnp.asarray(w_high))
-  conn_len = jnp.ceil(1 / conn_prob) * 2 - 1
-  conn_len = jnp.asarray(jnp.atleast_1d(conn_len), dtype=jnp.int32)
-  if seed is None:
-    with jax.ensure_compile_time_eval():
-      seed = np.random.randint(0, int(1e8), 1)
-  seed = jnp.atleast_1d(jnp.asarray(seed, dtype=jnp.uint32))
-  return raw_event_mv_prob_uniform(events, w_low, w_high, conn_len, seed, shape=shape,
-                                   transpose=transpose, outdim_parallel=outdim_parallel)[0]
-
-
-event_mv_prob_uniform.__doc__ = mv_prob_uniform.__doc__
-
-
-@set_module_as('braintaichi')
-def event_mv_prob_normal(
-    events: jax.Array,
-    w_mu: float,
-    w_sigma: float,
-    conn_prob: float,
-    seed: Optional[int] = None,
-    *,
-    shape: Tuple[int, int],
-    transpose: bool = False,
-    outdim_parallel: bool = True,
-) -> jax.Array:
-  events = jnp.asarray(events)
-  if isinstance(w_mu, float): w_mu = jnp.asarray(w_mu)
-  if isinstance(w_sigma, float): w_sigma = jnp.asarray(w_sigma)
-  w_mu = jnp.atleast_1d(jnp.asarray(w_mu))
-  w_sigma = jnp.atleast_1d(jnp.asarray(w_sigma))
-  conn_len = jnp.ceil(1 / conn_prob) * 2 - 1
-  conn_len = jnp.asarray(jnp.atleast_1d(conn_len), dtype=jnp.int32)
-  if seed is None:
-    with jax.ensure_compile_time_eval():
-      seed = np.random.randint(0, int(1e8), 1)
-  seed = jnp.atleast_1d(jnp.asarray(seed, dtype=jnp.uint32))
-  return raw_event_mv_prob_normal(events, w_mu, w_sigma, conn_len, seed, shape=shape,
-                                  transpose=transpose, outdim_parallel=outdim_parallel)[0]
-
-
-event_mv_prob_normal.__doc__ = mv_prob_normal.__doc__
 
 
 # -------------

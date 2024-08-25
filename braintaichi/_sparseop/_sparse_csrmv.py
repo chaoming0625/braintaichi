@@ -15,7 +15,8 @@
 
 # -*- coding: utf-8 -*-
 
-from typing import Tuple
+
+from typing import Tuple, Union
 
 import brainunit as u
 import jax
@@ -24,88 +25,13 @@ from jax import numpy as jnp
 from jax.experimental.sparse import csr
 from jax.interpreters import ad
 
+from braintaichi._primitive._batch_utils import register_general_batching
+from braintaichi._primitive._xla_custom_op import XLACustomOp
 from ._sparse_utils import csr_to_coo
-from ._base import XLACustomOp
-from ._batch_utils import register_general_batching
-
-__all__ = [
-  'csrmv',
-]
-
-
-def csrmv(
-    data: jax.typing.ArrayLike | u.Quantity,
-    indices: jax.typing.ArrayLike,
-    indptr: jax.typing.ArrayLike,
-    vector: jax.typing.ArrayLike,
-    *,
-    shape: Tuple[int, int],
-    transpose: bool = False,
-):
-  """Product of CSR sparse matrix and a dense vector using cuSPARSE algorithm.
-
-  This function supports JAX transformations, including `jit()`, `grad()`,
-  `vmap()` and `pmap()`.
-
-  Parameters
-  ----------
-  data: ndarray, float
-    An array of shape ``(nse,)``.
-  indices: ndarray
-    An array of shape ``(nse,)``.
-  indptr: ndarray
-    An array of shape ``(shape[0] + 1,)`` and dtype ``indices.dtype``.
-  vector: ndarray
-    An array of shape ``(shape[0] if transpose else shape[1],)``
-    and dtype ``data.dtype``.
-  shape: tuple of int
-    A length-2 tuple representing the matrix shape.
-  transpose: bool
-    A boolean specifying whether to transpose the sparse matrix
-    before computing.
-  method: str
-    The method used to compute Matrix-Vector Multiplication. Default is ``taichi``. 
-    The candidate methods are:
-
-    - ``None``: default using Taichi kernel.
-    - ``cusparse``: using cuSPARSE library.
-    - ``scalar``:
-    - ``vector``:
-    - ``adaptive``:
-
-  Returns
-  -------
-  y : ndarry
-    The array of shape ``(shape[1] if transpose else shape[0],)`` representing
-    the matrix vector product.
-  """
-
-  data = jnp.atleast_1d(data)
-
-  if vector.dtype == jnp.bool_:
-    vector = jnp.asarray(vector, dtype=data.dtype)
-
-  if data.dtype not in [jnp.float16, jnp.float32, jnp.float64]:
-    raise TypeError('Only support float16, float32 or float64 type. '
-                    f'But we got {data.dtype}.')
-  if data.dtype != vector.dtype:
-    raise TypeError('The types of data and vector should be the same. '
-                    f'But we got {data.dtype} != {vector.dtype}.')
-  assert data.ndim == indices.ndim == indptr.ndim == vector.ndim == 1
-  if not jnp.issubdtype(indices.dtype, jnp.integer):
-    raise ValueError('indices should be a 1D vector with integer type.')
-  if not jnp.issubdtype(indptr.dtype, jnp.integer):
-    raise ValueError('indptr should be a 1D vector with integer type.')
-
-  # if the shape of indices is (0,), then we return a zero vector
-  if indices.shape[0] == 0:
-    return jnp.zeros(shape[1] if transpose else shape[0], dtype=data.dtype)
-
-  return raw_csrmv_taichi(data, indices, indptr, vector, shape=shape, transpose=transpose)[0]
 
 
 def raw_csrmv_taichi(
-    data: jax.typing.ArrayLike | u.Quantity,
+    data: Union[jax.typing.ArrayLike, u.Quantity],
     indices: jax.typing.ArrayLike,
     indptr: jax.typing.ArrayLike,
     vector: jax.typing.ArrayLike,

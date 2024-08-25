@@ -28,7 +28,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ "3.9", "3.10", "3.11", "3.12" ]
+        python-version: [ "3.9", "3.10", "3.11", ]
 
     steps:
       - name: Cancel Previous Runs
@@ -47,10 +47,11 @@ jobs:
           python -m pip cache purge
           python -m pip install --upgrade pip setuptools  --no-cache-dir
           python -m pip install -r requirements-dev.txt  --no-cache-dir
-          pip install . --no-cache-dir
+          rm pyproject.toml
+          python setup.py install
       - name: Test with pytest
         run: |
-          pytest braintaichi/
+          pytest tests/
 
 
   test_macos:
@@ -58,7 +59,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ "3.9", "3.10", "3.11", "3.12" ]
+        python-version: [ "3.9", "3.10", "3.11", ]
 
     steps:
       - name: Cancel Previous Runs
@@ -77,10 +78,12 @@ jobs:
           python -m pip cache purge
           python -m pip install --upgrade pip setuptools --no-cache-dir
           python -m pip install -r requirements-dev.txt  --no-cache-dir
-          pip install .
+          pip install cibuildwheel 
+          cibuildwheel --platform macos
+          pip install dist/*
       - name: Test with pytest
         run: |
-          pytest braintaichi/
+          pytest tests/
 
 
   test_windows:
@@ -88,7 +91,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ "3.9", "3.10", "3.11", "3.12" ]
+        python-version: [ "3.9", "3.10", "3.11", ]
 
     steps:
       - name: Cancel Previous Runs
@@ -107,7 +110,8 @@ jobs:
           python -m pip cache purge
           python -m pip install --upgrade pip setuptools --no-cache-dir
           python -m pip install -r requirements-dev.txt  --no-cache-dir
-          pip install .  --no-cache-dir
+          rm pyproject.toml
+          python setup.py install
       - name: Test with pytest
         run: |
-          pytest braintaichi/ -p no:faulthandler
+          pytest tests/ -p no:faulthandler

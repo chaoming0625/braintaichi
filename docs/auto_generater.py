@@ -323,43 +323,6 @@ def main():
                 filename='apis/init.rst',
                 header='``braintools.init`` module')
 
-  module_and_name = [
-    ('_classification', 'Classification Losses'),
-    ('_correlation', 'Correlation'),
-    ('_fenchel_young', 'Fenchel-Young Loss'),
-    ('_firings', 'Spike Firing'),
-    ('_lfp', 'Local Field Potential'),
-    ('_ranking', 'Ranking Losses'),
-    ('_regression', 'Regression Losses'),
-    ('_smoothing', 'Smoothing Losses'),
-  ]
-  _write_submodules(module_name='braintools.metric',
-                    filename='apis/metric.rst',
-                    header='``braintools.metric`` module',
-                    submodule_names=[k[0] for k in module_and_name],
-                    section_names=[k[1] for k in module_and_name])
-
-  module_and_name = [
-    ('_activations', 'Activation Functions'),
-    ('_normalization', 'Normalization'),
-    ('_spikes', 'Spike Operations'),
-  ]
-  _write_submodules(module_name='braintools.functional',
-                    filename='apis/functional.rst',
-                    header='``braintools.functional`` module',
-                    submodule_names=[k[0] for k in module_and_name],
-                    section_names=[k[1] for k in module_and_name])
-
-  module_and_name = [
-    ('_sgd_optimizer', 'SGD Optimizers'),
-    ('_lr_scheduler', 'Learning Rate Schedulers'),
-  ]
-  _write_submodules(module_name='braintools.optim',
-                    filename='apis/optim.rst',
-                    header='``braintools.optim`` module',
-                    submodule_names=[k[0] for k in module_and_name],
-                    section_names=[k[1] for k in module_and_name])
-
 
 if __name__ == '__main__':
     main()

@@ -17,93 +17,13 @@
 
 import warnings
 from functools import partial
-from typing import Tuple
 
-import brainunit as u
-import jax
 import numpy as np
-from jax import core, numpy as jnp, dtypes, default_backend
+from jax import core, numpy as jnp
 from jax.interpreters import ad, mlir
 from jaxlib import gpu_sparse
 
-from ._batch_utils import register_general_batching
-
-__all__ = [
-  'coomv',
-]
-
-
-def coomv(
-    data: jax.typing.ArrayLike | u.Quantity,
-    row: jax.typing.ArrayLike,
-    col: jax.typing.ArrayLike,
-    vector: jax.typing.ArrayLike,
-    *,
-    shape: Tuple[int, int],
-    rows_sorted: bool = False,
-    cols_sorted: bool = False,
-    transpose: bool = False,
-    method: str = 'cusparse'
-):
-  """Product of COO sparse matrix and a dense vector using cuSPARSE algorithm.
-
-  This function supports JAX transformations, including `jit()`, `grad()`,
-  `vmap()` and `pmap()`.
-
-  Parameters
-  ----------
-  data: ndarray, float
-    An array of shape ``(nse,)``.
-  row: ndarray
-    An array of shape ``(nse,)``.
-  col: ndarray
-    An array of shape ``(nse,)`` and dtype ``row.dtype``.
-  vector: ndarray
-    An array of shape ``(shape[0] if transpose else shape[1],)`` and
-    dtype ``data.dtype``.
-  shape: tuple of int
-    The shape of the sparse matrix.
-  rows_sorted: bool
-    Row index are sorted.
-  cols_sorted: bool
-    Column index are sorted.
-  transpose: bool
-    A boolean specifying whether to transpose the sparse matrix
-    before computing.
-  method: str
-    The method used to compute the matrix-vector multiplication.
-
-  Returns
-  -------
-  y: ndarray
-    An array of shape ``(shape[1] if transpose else shape[0],)`` representing
-    the matrix vector product.
-  """
-
-  data = jnp.atleast_1d(jnp.asarray(data))
-  row = jnp.asarray(row)
-  col = jnp.asarray(col)
-  vector = jnp.asarray(vector)
-
-  if method == 'cusparse':
-    if default_backend() != 'cpu':
-      if data.shape[0] == 1:
-        data = jnp.ones(row.shape, dtype=data.dtype) * data
-      if row.dtype in [jnp.uint32, jnp.uint64]:
-        row = jnp.asarray(row, dtype=dtypes.canonicalize_dtype(jnp.int64))
-      if col.dtype in [jnp.uint32, jnp.uint64]:
-        col = jnp.asarray(col, dtype=dtypes.canonicalize_dtype(jnp.int64))
-    return _coomv_cusparse_p.bind(data,
-                                  row,
-                                  col,
-                                  vector,
-                                  shape=shape,
-                                  rows_sorted=rows_sorted,
-                                  cols_sorted=cols_sorted,
-                                  transpose=transpose)
-
-  else:
-    raise ValueError
+from braintaichi._primitive._batch_utils import register_general_batching
 
 
 # --------------------------------------------------------------------

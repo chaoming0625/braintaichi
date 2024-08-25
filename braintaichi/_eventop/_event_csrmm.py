@@ -15,7 +15,7 @@
 
 # -*- coding: utf-8 -*-
 
-from typing import Tuple
+from typing import Tuple, Union
 
 import brainunit as u
 import jax
@@ -25,46 +25,14 @@ from jax import numpy as jnp
 from jax.experimental.sparse import csr
 from jax.interpreters import ad
 
-from ._sparse_utils import csr_to_coo
-from ._base import XLACustomOp
-from ._batch_utils import register_general_batching
-from ._sparse_csrmm import raw_csrmm_taichi as normal_csrmm
-
-__all__ = [
-  'event_csrmm',
-]
-
-
-def event_csrmm(
-    data: jax.typing.ArrayLike | u.Quantity,
-    indices: jax.typing.ArrayLike,
-    indptr: jax.typing.ArrayLike,
-    matrix: jax.typing.ArrayLike,
-    *,
-    shape: Tuple[int, int],
-    transpose: bool = False,
-):
-  """Product of CSR sparse matrix and a dense event matrix.
-
-  Args:
-      data : array of shape ``(nse,)``, float.
-      indices : array of shape ``(nse,)``
-      indptr : array of shape ``(shape[0] + 1,)`` and dtype ``indices.dtype``
-      matrix : array of shape ``(shape[0] if transpose else shape[1], cols)`` and
-               dtype ``data.dtype``
-      shape : length-2 tuple representing the matrix shape
-      transpose : boolean specifying whether to transpose the sparse matrix
-                  before computing.
-
-  Returns:
-      C : array of shape ``(shape[1] if transpose else shape[0], cols)``
-      representing the matrix-matrix product product.
-  """
-  return raw_event_csrmm_taichi(data, indices, indptr, matrix, shape=shape, transpose=transpose)[0]
+from braintaichi._primitive._batch_utils import register_general_batching
+from braintaichi._primitive._xla_custom_op import XLACustomOp
+from braintaichi._sparseop._sparse_csrmm import raw_csrmm_taichi as normal_csrmm
+from braintaichi._sparseop._sparse_utils import csr_to_coo
 
 
 def raw_event_csrmm_taichi(
-    data: jax.typing.ArrayLike | u.Quantity,
+    data: Union[jax.typing.ArrayLike, u.Quantity],
     indices: jax.typing.ArrayLike,
     indptr: jax.typing.ArrayLike,
     matrix: jax.typing.ArrayLike,

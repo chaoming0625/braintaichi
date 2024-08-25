@@ -13,20 +13,11 @@
 # limitations under the License.
 # ==============================================================================
 
+from ._sparse_utils import *
+from ._sparse_utils import __all__ as _sparse_utils_all
+from .main import *
+from .main import __all__ as _main_all
 
-import brainstate as bst
+__all__ = _main_all + _sparse_utils_all
 
-import braintaichi as bti
-
-
-def try_example1():
-  events = bst.random.random((1000,)) < 0.1
-
-  # Create a sparse matrix
-  r = bti.jitc_event_mv_prob_homo(events, 1., conn_prob=0.1, shape=(1000, 1000), seed=123)
-  print(r.shape)
-  print(r)
-
-
-if __name__ == '__main__':
-  try_example1()
+del _sparse_utils_all, _main_all
