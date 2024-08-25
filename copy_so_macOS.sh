@@ -1,7 +1,6 @@
 #! /bin/sh
 
-pip install -r requirements.txt
-pip install taichi
+pip install taichi==1.7.2
 chmod +x ./copy_so_macOS.py
 python copy_so_macOS.py
 
