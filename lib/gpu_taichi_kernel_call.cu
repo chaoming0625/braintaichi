@@ -7,10 +7,12 @@ namespace brain_taichi {
                                   void **buffers,
                                   const char *opaque,
                                   std::size_t opaque_len) {
+        cudaStreamSynchronize(stream);
         taichi_kernel->set_cuda_stream(stream);
         OpaqueStruct data = parseOpaque(opaque, opaque_len);
 
-        // restruct shape_list, it's a 2d array and the shape of it is (in_num+out_num, the max of dim_count)
+        // restruct shape_list, it's a 2d array and the shape
+        // of it is (in_num+out_num, the max of dim_count)
         int param_total_num = data.in_num + data.out_num;
         uint32_t shape_list_2d[param_total_num][8];
         for (int i = 0; i < param_total_num; i++) {
@@ -19,8 +21,10 @@ namespace brain_taichi {
             }
         }
 
+        // Load the taichi kernel
         taichi_kernel->load(data.kernel_aot_path.c_str());
 
+        // push the input data
         for (int i = 0; i < data.in_num; i++) {
             push_input(data.type_list[i],
                        buffers[i],
@@ -29,6 +33,7 @@ namespace brain_taichi {
                        shape_list_2d[i]);
         }
 
+        // push the output data
         for (int i = 0; i < data.out_num; i++) {
             push_output(data.type_list[i + data.in_num],
                         buffers[i + data.in_num],
