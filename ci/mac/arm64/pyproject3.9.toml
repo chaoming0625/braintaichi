@@ -37,7 +37,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [project]
-requires-python = ">=3.8, <=3.12"
+requires-python = ">=3.9, <3.10"
 name = "braintaichi"
 version = "0.0.1"
 
@@ -54,10 +54,10 @@ repair-wheel-command = """
 
 [tool.cibuildwheel.macos]
 before-build = "sh copy_so_macOS.sh"
-archs = ["x86_64", "arm64"]
+archs = ["arm64"]
 skip = ["pp*"]
 repair-wheel-command = """
-    export LD_LIBRARY_PATH=/project/braintaichi:$LD_LIBRARY_PATH &&
+    export DYLD_LIBRARY_PATH=/Users/runner/work/braintaichi/braintaichi/project/braintaichi:$DYLD_LIBRARY_PATH &&
     delocate-wheel -w {dest_dir} -v {wheel}
 """
 
