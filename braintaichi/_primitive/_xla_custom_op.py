@@ -24,9 +24,9 @@ from jax.interpreters import xla, batching, ad, mlir
 
 from ._ad_support import defjvp
 from ._batch_utils import register_general_batching
-from ._mlir_register import (
-  register_taichi_aot_mlir_cpu_translation_rule, # noqa
-  register_taichi_aot_mlir_gpu_translation_rule, # noqa
+from ._mlir_translation_rule import (
+  register_taichi_aot_mlir_cpu_translation_rule,  # noqa
+  register_taichi_aot_mlir_gpu_translation_rule,  # noqa
 )
 
 __all__ = [
@@ -49,7 +49,8 @@ _idx = 0
 
 
 class XLACustomOp:
-  """Creating a XLA custom call operator.
+  """
+  Creating a XLA custom call operator.
 
   Args:
     cpu_kernel: Callable. The function defines the computation on CPU backend.
@@ -71,8 +72,6 @@ class XLACustomOp:
       transpose_translation: Callable = None,
       name: str = None,
   ):
-    super().__init__()
-
     # set cpu_kernel and gpu_kernel
     self.cpu_kernel = cpu_kernel
     self.gpu_kernel = gpu_kernel

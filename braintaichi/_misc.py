@@ -13,20 +13,22 @@
 # limitations under the License.
 # ==============================================================================
 
+import jax
 
-import brainstate as bst
-
-import braintaichi as bti
-
-
-def try_example1():
-  events = bst.random.random((1000,)) < 0.1
-
-  # Create a sparse matrix
-  r = bti.event_mv_prob_homo(events, 1., conn_prob=0.1, shape=(1000, 1000), seed=123)
-  print(r.shape)
-  print(r)
+def _get_dtype(v):
+  if hasattr(v, 'dtype'):
+    dtype = v.dtype
+  else:
+    dtype = jax.dtypes.canonicalize_dtype(type(v))
+  return dtype
 
 
-if __name__ == '__main__':
-  try_example1()
+
+def set_module_as(name: str):
+  def decorator(f):
+    f.__module__ = name
+    return f
+
+  return decorator
+
+

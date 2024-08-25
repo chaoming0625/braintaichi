@@ -14,19 +14,10 @@
 # ==============================================================================
 
 
-import brainstate as bst
+from .main import *
+from .main import __all__ as _main_all
 
-import braintaichi as bti
+__all__ = _main_all
 
+del _main_all
 
-def try_example1():
-  events = bst.random.random((1000,)) < 0.1
-
-  # Create a sparse matrix
-  r = bti.event_mv_prob_homo(events, 1., conn_prob=0.1, shape=(1000, 1000), seed=123)
-  print(r.shape)
-  print(r)
-
-
-if __name__ == '__main__':
-  try_example1()

@@ -79,33 +79,15 @@ elif platform.system() == 'Linux':
 
 del os, sys, platform, ti, ctypes, taichi_path, taichi_c_api_install_dir
 
-from ._base import *
-from ._base import __all__ as _base_all
-from ._ad_support import *
-from ._ad_support import __all__ as _ad_support_all
-from ._batch_utils import *
-from ._batch_utils import __all__ as _batch_utils_all
-from ._event_csrmm import *
-from ._event_csrmm import __all__ as _event_csrmm_all
-from ._event_csrmv import *
-from ._event_csrmv import __all__ as _event_csrmv_all
-from ._jit_csrmv import *
-from ._jit_csrmv import __all__ as _jit_csrmv_all
-from ._jit_event_csrmv import *
-from ._jit_event_csrmv import __all__ as _jit_event_csrmv_all
-from ._sparse_coomv import *
-from ._sparse_coomv import __all__ as _sparse_coomv_all
-from ._sparse_csrmm import *
-from ._sparse_csrmm import __all__ as _sparse_csrmm_all
-from ._sparse_csrmv import *
-from ._sparse_csrmv import __all__ as _sparse_csrmv_all
-from ._taichi_rand import *
-from ._taichi_rand import __all__ as _taichi_rand_all
+from ._sparseop import *
+from ._sparseop import __all__ as _sparseop_all
+from ._jitconnop import *
+from ._jitconnop import __all__ as _jitconn_all
+from ._eventop import *
+from ._eventop import __all__ as _eventop_all
+from ._primitive import *
+from ._primitive import __all__ as _prim_all
 
-__all__ = (__all__ + _base_all + _ad_support_all + _batch_utils_all + _event_csrmm_all +
-           _event_csrmv_all + _jit_csrmv_all + _jit_event_csrmv_all + _sparse_coomv_all +
-           _sparse_csrmm_all + _sparse_csrmv_all + _taichi_rand_all)
+__all__ = (__all__ + _prim_all + _sparseop_all + _eventop_all + _jitconn_all)
 
-del (_base_all, _ad_support_all, _batch_utils_all, _event_csrmm_all, _event_csrmv_all,
-     _jit_csrmv_all, _jit_event_csrmv_all, _sparse_coomv_all, _sparse_csrmm_all,
-     _sparse_csrmv_all, _taichi_rand_all)
+del (_prim_all, _sparseop_all, _eventop_all, _jitconn_all)
