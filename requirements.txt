@@ -1,6 +1,7 @@
 jax>=0.4.16
 jaxlib
 numpy
+brainstate
 brainunit
 taichi
 cmake

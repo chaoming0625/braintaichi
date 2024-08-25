@@ -25,8 +25,8 @@ from jax.interpreters import xla, batching, ad, mlir
 from ._ad_support import defjvp
 from ._batch_utils import register_general_batching
 from ._mlir_register import (
-  register_taichi_aot_mlir_cpu_translation_rule,
-  register_taichi_aot_mlir_gpu_translation_rule
+  register_taichi_aot_mlir_cpu_translation_rule, # noqa
+  register_taichi_aot_mlir_gpu_translation_rule, # noqa
 )
 
 __all__ = [

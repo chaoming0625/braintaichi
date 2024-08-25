@@ -47,15 +47,11 @@ if (BRAINPY_CUDA)
             ${CMAKE_CURRENT_LIST_DIR}/lib/gpu_ops.cc
             ${CMAKE_CURRENT_LIST_DIR}/lib/gpu_taichi_aot_kernel.cu
             ${CMAKE_CURRENT_LIST_DIR}/lib/gpu_taichi_kernel_call.cu
-            ${CMAKE_CURRENT_LIST_DIR}/lib/gpu_cupy_kernel_helpers.cu
-            ${CMAKE_CURRENT_LIST_DIR}/lib/gpu_cupy_kernel_call.cu
     )
     target_sources(gpu_ops PRIVATE
             ${CMAKE_CURRENT_LIST_DIR}/lib/gpu_ops.cc
             ${CMAKE_CURRENT_LIST_DIR}/lib/gpu_taichi_aot_kernel.cu
             ${CMAKE_CURRENT_LIST_DIR}/lib/gpu_taichi_kernel_call.cu
-            ${CMAKE_CURRENT_LIST_DIR}/lib/gpu_cupy_kernel_helpers.cu
-            ${CMAKE_CURRENT_LIST_DIR}/lib/gpu_cupy_kernel_call.cu
     )
     target_link_libraries(gpu_ops PRIVATE Taichi::Runtime)
     # target_link_libraries(gpu_ops PRIVATE ${PYTHON_LIBRARIES})

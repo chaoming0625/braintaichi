@@ -1,4 +1,20 @@
+# Copyright 2024- BrainPy Ecosystem Limited. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ==============================================================================
+
 # -*- coding: utf-8 -*-
+
 import numbers
 from typing import Tuple, Optional
 
@@ -9,7 +25,7 @@ from jax import numpy as jnp
 from jax.interpreters import ad
 
 from ._base import XLACustomOp
-from ._sparse_utils import _get_dtype
+from ._sparse_utils import _get_dtype, set_module_as
 from ._taichi_rand import (lfsr88_key, lfsr88_random_integers, lfsr88_uniform, lfsr88_normal)
 
 __all__ = [
@@ -22,6 +38,7 @@ __all__ = [
 ]
 
 
+@set_module_as('braintaichi')
 def mv_prob_homo(
     vector: jax.typing.ArrayLike,
     weight: float,
@@ -95,6 +112,7 @@ def mv_prob_homo(
                           transpose=transpose, outdim_parallel=outdim_parallel)[0]
 
 
+@set_module_as('braintaichi')
 def mv_prob_uniform(
     vector: jax.Array,
     w_low: float,
@@ -171,6 +189,7 @@ def mv_prob_uniform(
                              transpose=transpose, outdim_parallel=outdim_parallel)[0]
 
 
+@set_module_as('braintaichi')
 def mv_prob_normal(
     vector: jax.Array,
     w_mu: float,
@@ -247,6 +266,7 @@ def mv_prob_normal(
                             transpose=transpose, outdim_parallel=outdim_parallel)[0]
 
 
+@set_module_as('braintaichi')
 def get_homo_weight_matrix(
     weight: float,
     conn_prob: float,
@@ -300,6 +320,7 @@ def get_homo_weight_matrix(
     return r
 
 
+@set_module_as('braintaichi')
 def get_uniform_weight_matrix(
     w_low: float,
     w_high: float,
@@ -352,6 +373,7 @@ def get_uniform_weight_matrix(
     return r
 
 
+@set_module_as('braintaichi')
 def get_normal_weight_matrix(
     w_mu: float,
     w_sigma: float,

@@ -5,7 +5,6 @@ import glob
 import os
 import platform
 import re
-import shutil
 import subprocess
 import sys
 from setuptools import setup, Extension, find_namespace_packages
@@ -23,16 +22,21 @@ except ModuleNotFoundError:
         '\n'
         '> pip install pybind11'
     )
+
+
+__minimal_taichi_version = (1, 8, 0)
+
 try:
     import taichi as ti
 
-    if ti.__version__ < (1, 7, 2):
+    if ti.__version__ < __minimal_taichi_version:
         raise ModuleNotFoundError
 except ModuleNotFoundError:
     taichi_installed = 'taichi' in globals()
-    error_message = ('Please update taichi to 1.7.2 or above!' if taichi_installed else
+    error_message = (f'Please update taichi to {__minimal_taichi_version} or above!'
+                     if taichi_installed else
                      'Please install taichi before compiling braintaichi!')
-    error_message += '\n> pip install taichi==1.7.2 -U'
+    error_message += '\n> pip install taichi -U'
     raise ModuleNotFoundError(error_message)
 
 # set taichi environments
@@ -127,8 +131,6 @@ class CMakeBuildExt(build_ext):
         print(" ".join(cmake_args))
 
         os.makedirs(self.build_temp, exist_ok=True)
-        # subprocess.check_call(["cmake", '-DCMAKE_CUDA_FLAGS="-arch=sm_86"'] + cmake_args + [HERE],
-        #                       cwd=self.build_temp)
         subprocess.check_call(["cmake"] + cmake_args + [HERE], cwd=self.build_temp)
 
         # Build all the extensions
@@ -158,7 +160,7 @@ setup(
     package_data={
         'braintaichi': ['*.so']
     },
-    install_requires=['brainunit', 'taichi', 'jax'],
+    install_requires=['brainunit', 'brainstate', 'taichi', 'jax'],
     extras_require={"test": "pytest"},
     python_requires='>=3.9',
     url='https://github.com/chaoming0625/braintaichi',

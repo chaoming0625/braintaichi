@@ -34,14 +34,17 @@ from jax.interpreters import mlir
 from jax.lib import xla_client
 from jaxlib.hlo_helpers import custom_call
 
-from . import cpu_ops
-from . import gpu_ops
 from ._batch_utils import _shape_to_layout
-
+from . import cpu_ops
 for _name, _value in cpu_ops.registrations().items():
   xla_client.register_custom_call_target(_name, _value, platform="cpu")
-for _name, _value in gpu_ops.registrations().items():
-  xla_client.register_custom_call_target(_name, _value, platform="gpu")
+try:
+  from . import gpu_ops
+  for _name, _value in gpu_ops.registrations().items():
+    xla_client.register_custom_call_target(_name, _value, platform="gpu")
+except ImportError:
+  gpu_ops = None
+
 
 taichi_cache_path = None
 

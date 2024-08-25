@@ -1,4 +1,20 @@
+# Copyright 2024- BrainPy Ecosystem Limited. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ==============================================================================
+
 # -*- coding: utf-8 -*-
+
 
 from typing import Tuple, Optional
 
@@ -17,9 +33,8 @@ from ._jit_csrmv import (mv_prob_homo,
                          raw_mv_prob_normal,
                          _mv_prob_homo_transpose,
                          _mv_prob_uniform_transpose,
-                         _mv_prob_normal_transpose,
-                         _reverse)
-from ._sparse_utils import _get_dtype
+                         _mv_prob_normal_transpose)
+from ._sparse_utils import _get_dtype, set_module_as
 from ._taichi_rand import (lfsr88_key, lfsr88_random_integers, lfsr88_uniform, lfsr88_normal)
 
 __all__ = [
@@ -29,6 +44,7 @@ __all__ = [
 ]
 
 
+@set_module_as('braintaichi')
 def event_mv_prob_homo(
     events: jax.Array,
     weight: float,
@@ -58,6 +74,7 @@ def event_mv_prob_homo(
 event_mv_prob_homo.__doc__ = mv_prob_homo.__doc__
 
 
+@set_module_as('braintaichi')
 def event_mv_prob_uniform(
     events: jax.Array,
     w_low: float,
@@ -87,6 +104,7 @@ def event_mv_prob_uniform(
 event_mv_prob_uniform.__doc__ = mv_prob_uniform.__doc__
 
 
+@set_module_as('braintaichi')
 def event_mv_prob_normal(
     events: jax.Array,
     w_mu: float,
