@@ -1,8 +1,15 @@
 name: Publish to PyPI.org
+
 on:
     schedule:
-        - cron: "0 13 * * *"
+    - cron: '0 20 * * *'  # GMT 20 == GMT+8 04
     workflow_dispatch:
+        # Manually trigger the release workflow, a version must be provided
+        inputs:
+            version:
+                description: 'The version to release (e.g. v0.8.0), or leave it empty for nightly build'
+                type: string
+                required: false
 jobs:
     pypi:
         runs-on: ubuntu-latest
