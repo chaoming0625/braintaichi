@@ -4,12 +4,12 @@ on:
     schedule:
     - cron: '0 20 * * *'  # GMT 20 == GMT+8 04
     workflow_dispatch:
+        # Manually trigger the release workflow, a version must be provided
         inputs:
             version:
                 description: 'The version to release (e.g. v0.8.0), or leave it empty for nightly build'
                 type: string
                 required: false
-
 jobs:
     # Define test jobs as part of the publish workflow
     build_and_test_linux:
