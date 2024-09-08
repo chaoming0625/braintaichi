@@ -108,7 +108,7 @@ jobs:
             - name: Archive Wheel Artifacts
               uses: actions/upload-artifact@v3
               with:
-                name: dist-macos
+                name: dist-windows
                 path: dist/*.whl
                 retention-days: 20
             - name: Test with pytest
