@@ -125,7 +125,7 @@ jobs:
         steps:
         - name: Checkout
           uses: actions/checkout@v4
-        - name: Download Artifacts
+        - name: Download linux Artifacts
           uses: actions/download-artifact@v3
           with:
             name: dist-linux
