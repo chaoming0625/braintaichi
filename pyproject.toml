@@ -40,7 +40,36 @@ build-backend = "setuptools.build_meta"
 requires-python = ">=3.8, <=3.12"
 name = "braintaichi"
 version = "0.0.1"
+description = "Leveraging Taichi Lang to customize brain dynamics operators"
 readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "BrainTaichi Developers", email = "chao.brain@qq.com" }]
+keywords = ["event-driven computation", "sparse computation"]
+classifiers = [
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries"
+]
+dependencies = ["brainunit", "brainstate", "jax", "jaxlib", "taichi"]
+
+[project.dynamic]
+description = true
+readme = true
+license = true
+authors = true
+keywords = true
+classifiers = true
 
 [tool.cibuildwheel.linux]
 before-all = "sh prepare_build_wheel_on_cuda.sh"
