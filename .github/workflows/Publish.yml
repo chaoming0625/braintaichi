@@ -41,7 +41,9 @@ jobs:
                 path: dist/*.whl
                 retention-days: 20
             - name: Test with pytest
-              run: pytest tests/
+              run: |
+                pip install dist/*.whl
+                pytest tests/
 
     build_and_test_macos:
         name: Build and Test on macOS
@@ -51,28 +53,30 @@ jobs:
             matrix:
                 python-version: ["3.9", "3.10", "3.11", "3.12"]
         steps:
-        - name: Checkout
-          uses: actions/checkout@v4
-        - name: Set up Python ${{ matrix.python-version }}
-          uses: actions/setup-python@v5
-          with:
-            python-version: ${{ matrix.python-version }}
-        - name: Install dependencies
-          run: |
-            python -m pip cache purge
-            python -m pip install --upgrade pip setuptools --no-cache-dir
-            python -m pip install -r requirements-dev.txt --no-cache-dir
-            python -m pip install setuptools==68.2.0
-        - name: Build Wheel
-          run: python setup.py bdist_wheel
-        - name: Archive Wheel Artifacts
-          uses: actions/upload-artifact@v3
-          with:
-            name: dist-macos
-            path: dist/*.whl
-            retention-days: 20
-        - name: Test with pytest
-          run: pytest tests/
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Set up Python ${{ matrix.python-version }}
+              uses: actions/setup-python@v5
+              with:
+                python-version: ${{ matrix.python-version }}
+            - name: Install dependencies
+              run: |
+                python -m pip cache purge
+                python -m pip install --upgrade pip setuptools --no-cache-dir
+                python -m pip install -r requirements-dev.txt --no-cache-dir
+                python -m pip install setuptools==68.2.0
+            - name: Build Wheel
+              run: python setup.py bdist_wheel
+            - name: Archive Wheel Artifacts
+              uses: actions/upload-artifact@v3
+              with:
+                name: dist-macos
+                path: dist/*.whl
+                retention-days: 20
+            - name: Test with pytest
+              run: |
+                pip install dist/*.whl
+                pytest tests/
 
     build_and_test_windows:
         name: Build and Test on Windows
@@ -103,7 +107,9 @@ jobs:
                 path: dist/*.whl
                 retention-days: 20
             - name: Test with pytest
-              run: pytest tests/
+              run: |
+                pip install dist/*.whl
+                pytest tests/
 
     publish_pypi:
         name: Upload release to PyPI
