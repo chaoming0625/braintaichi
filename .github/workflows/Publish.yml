@@ -4,22 +4,127 @@ on:
     schedule:
     - cron: '0 20 * * *'  # GMT 20 == GMT+8 04
     workflow_dispatch:
-        # Manually trigger the release workflow, a version must be provided
         inputs:
             version:
                 description: 'The version to release (e.g. v0.8.0), or leave it empty for nightly build'
                 type: string
                 required: false
+
 jobs:
-    pypi:
+    # Define test jobs as part of the publish workflow
+    build_and_test_linux:
+        name: Build and Test on Linux
         runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                python-version: ["3.9", "3.10", "3.11", "3.12"]
         steps:
             - name: Checkout
               uses: actions/checkout@v4
+            - name: Set up Python ${{ matrix.python-version }}
+              uses: actions/setup-python@v5
               with:
-                fetch-depth: 0
-            - run: python setup.py bdist_wheel --python-tag=py3
-            - name: Publish package
-              uses: pypa/gh-action-pypi-publish@release/v1
+                python-version: ${{ matrix.python-version }}
+            - name: Install dependencies
+              run: |
+                python -m pip cache purge
+                python -m pip install --upgrade pip setuptools --no-cache-dir
+                python -m pip install -r requirements-dev.txt --no-cache-dir
+            - name: Build Wheel
+              run: python setup.py bdist_wheel
+            - name: Archive Wheel Artifacts
+              uses: actions/upload-artifact@v3
               with:
-                password: ${{ secrets.PYPI_API_TOKEN }}
+                name: dist-linux
+                path: dist/*.whl
+                retention-days: 20
+            - name: Test with pytest
+              run: pytest tests/
+
+    build_and_test_macos:
+        name: Build and Test on macOS
+        runs-on: macos-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                python-version: ["3.9", "3.10", "3.11", "3.12"]
+        steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+        - name: Set up Python ${{ matrix.python-version }}
+          uses: actions/setup-python@v5
+          with:
+            python-version: ${{ matrix.python-version }}
+        - name: Install dependencies
+          run: |
+            python -m pip cache purge
+            python -m pip install --upgrade pip setuptools --no-cache-dir
+            python -m pip install -r requirements-dev.txt --no-cache-dir
+        - name: Build Wheel
+          run: python setup.py bdist_wheel
+        - name: Archive Wheel Artifacts
+          uses: actions/upload-artifact@v3
+          with:
+            name: dist-macos
+            path: dist/*.whl
+            retention-days: 20
+        - name: Test with pytest
+          run: pytest tests/
+
+    build_and_test_windows:
+        name: Build and Test on Windows
+        runs-on: windows-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                python-version: ["3.9", "3.10", "3.11", "3.12"]
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Set up Python ${{ matrix.python-version }}
+              uses: actions/setup-python@v5
+              with:
+                python-version: ${{ matrix.python-version }}
+            - name: Install dependencies
+              run: |
+                python -m pip cache purge
+                python -m pip install --upgrade pip setuptools --no-cache-dir
+                python -m pip install -r requirements-dev.txt --no-cache-dir
+            - name: Build Wheel
+              run: python setup.py bdist_wheel
+            - name: Archive Wheel Artifacts
+              uses: actions/upload-artifact@v3
+              with:
+                name: dist-macos
+                path: dist/*.whl
+                retention-days: 20
+            - name: Test with pytest
+              run: pytest tests/
+
+    publish_pypi:
+        name: Upload release to PyPI
+        runs-on: ubuntu-latest
+        needs: [build_and_test_linux, build_and_test_macos, build_and_test_windows]
+        steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+        - name: Download Artifacts
+          uses: actions/download-artifact@v3
+          with:
+            name: dist-linux
+            path: dist/linux/
+        - name: Download macOS Artifacts
+          uses: actions/download-artifact@v3
+          with:
+            name: dist-macos
+            path: dist/macos/
+        - name: Download Windows Artifacts
+          uses: actions/download-artifact@v3
+          with:
+            name: dist-windows
+            path: dist/windows/
+        - name: Publish to PyPI
+          uses: pypa/gh-action-pypi-publish@release/v1
+          with:
+            password: ${{ secrets.PYPI_API_TOKEN }}
