@@ -64,12 +64,12 @@ classifiers = [
 dependencies = ["brainunit", "brainstate", "jax", "jaxlib", "taichi"]
 
 [project.dynamic]
-description = true
-readme = true
-license = true
-authors = true
-keywords = true
-classifiers = true
+description = ["description"]
+readme = ["readme"]
+license = ["license"]
+authors = ["authors"]
+keywords = ["keywords"]
+classifiers = ["classifiers"]
 
 [tool.cibuildwheel.linux]
 before-all = "sh prepare_build_wheel_on_cuda.sh"
