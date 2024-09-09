@@ -1,4 +1,4 @@
-name: Publish to PyPI.org
+name: Publish to PyPI.org(CPU)
 
 on:
     schedule:
@@ -12,7 +12,7 @@ on:
                 required: false
 jobs:
     # Define test jobs as part of the publish workflow
-    build_and_test_linux:
+    test_linux:
         name: Build and Test on Linux
         runs-on: ubuntu-latest
         strategy:
@@ -34,18 +34,72 @@ jobs:
                 python -m pip install setuptools==68.2.0
             - name: Build Wheel
               run: python setup.py bdist_wheel
-            - name: Archive Wheel Artifacts
-              uses: actions/upload-artifact@v3
-              with:
-                name: dist-linux
-                path: dist/*.whl
-                retention-days: 20
             - name: Test with pytest
               run: |
                 pip install dist/*.whl
                 pytest tests/
-
-    build_and_test_macos:
+    build_linux_cpu:
+        name: Build on Linux(CPU)
+        runs-on: ubuntu-latest
+        needs: [test_linux]
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Set up Python 3.9
+              uses: actions/setup-python@v5
+              with:
+                python-version: 3.9
+            - name: Install dependencies
+              run: |
+                python -m pip cache purge
+                python -m pip install --upgrade pip setuptools --no-cache-dir
+                python -m pip install -r requirements-dev.txt --no-cache-dir
+                python -m pip install setuptools==68.2.0
+                pip install cibuildwheel
+            - name: Build Wheel
+              run: |
+                cibuildwheel --platform linux
+                mkdir dist
+                cp wheelhouse/*.whl dist/
+            - name: Archive Wheel Artifacts
+              uses: actions/upload-artifact@v3
+              with:
+                name: dist-linux-cpu
+                path: dist/*.whl
+                retention-days: 20
+    
+    # build_linux_gpu:
+    #     name: Build on Linux(GPU)
+    #     runs-on: ubuntu-latest
+    #     needs: [test_linux]
+    #     steps:
+    #         - name: Checkout
+    #           uses: actions/checkout@v4
+    #         - name: Set up Python 3.9
+    #           uses: actions/setup-python@v5
+    #           with:
+    #             python-version: 3.9
+    #         - name: Install dependencies
+    #           run: |
+    #             python -m pip cache purge
+    #             python -m pip install --upgrade pip setuptools --no-cache-dir
+    #             python -m pip install -r requirements-dev.txt --no-cache-dir
+    #             python -m pip install setuptools==68.2.0
+    #             pip install cibuildwheel
+    #         - name: Build Wheel
+    #           run: |
+    #             rm -rf setup.py
+    #             cp setup_cuda.py setup.py
+    #             cibuildwheel --platform linux
+    #             mkdir dist
+    #             cp wheelhouse/*.whl dist/
+    #         - name: Archive Wheel Artifacts
+    #           uses: actions/upload-artifact@v3
+    #           with:
+    #             name: dist-linux-gpu
+    #             path: dist/*.whl
+    #             retention-days: 20
+    build_and_test_macos_arm:
         name: Build and Test on macOS
         runs-on: macos-latest
         strategy:
@@ -75,13 +129,45 @@ jobs:
             - name: Archive Wheel Artifacts
               uses: actions/upload-artifact@v3
               with:
-                name: dist-macos
+                name: dist-macos-arm
                 path: dist/*.whl
                 retention-days: 20
             - name: Test with pytest
               run: |
                 pip install dist/*.whl
                 pytest tests/
+
+    build_macos_x86:
+        name: Build on macOS(x86)
+        runs-on: macos-latest
+        needs: [build_and_test_macos_arm]
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Set up Python 3.9
+              uses: actions/setup-python@v5
+              with:
+                python-version: 3.9
+            - name: Install dependencies
+              run: |
+                python -m pip cache purge
+                python -m pip install --upgrade pip setuptools --no-cache-dir
+                python -m pip install -r requirements-dev.txt --no-cache-dir
+                python -m pip install setuptools==68.2.0
+                pip install cibuildwheel
+            - name: Build Wheel
+              run: |
+                sh copy_pyproject_mac_x86_64.sh
+                cibuildwheel --platform macos
+                mkdir dist
+                cp wheelhouse/*.whl dist/
+            - name: Archive Wheel Artifacts
+              uses: actions/upload-artifact@v3
+              with:
+                name: dist-macos-x86
+                path: dist/*.whl
+                retention-days: 20
+
 
     build_and_test_windows:
         name: Build and Test on Windows
@@ -121,7 +207,7 @@ jobs:
     publish_pypi:
         name: Upload release to PyPI
         runs-on: ubuntu-latest
-        needs: [build_and_test_linux, build_and_test_macos, build_and_test_windows]
+        needs: [build_linux_cpu, build_and_test_macos_arm, build_macos_x86, build_and_test_windows]
         permissions:
             id-token: write
             contents: write
@@ -129,16 +215,30 @@ jobs:
         steps:
         - name: Checkout
           uses: actions/checkout@v4
-        - name: Download linux Artifacts
+        - name: Download linux(CPU) Artifacts
           uses: actions/download-artifact@v3
           with:
-            name: dist-linux
-            path: dist
-        - name: Download macOS Artifacts
+            name: dist-linux-cpu
+            path: dist/
+
+        # - name: Download linux(GPU) Artifacts
+        #   uses: actions/download-artifact@v3
+        #   with:
+        #     name: dist-linux-gpu
+        #     path: dist/
+            
+        - name: Download macOS(ARM) Artifacts
           uses: actions/download-artifact@v3
           with:
-            name: dist-macos
-            path: dist
+            name: dist-macos-arm
+            path: dist/
+
+        - name: Download macOS(x86) Artifacts
+          uses: actions/download-artifact@v3
+          with:
+            name: dist-macos-x86
+            path: dist/
+
         - name: Download Windows Artifacts
           uses: actions/download-artifact@v3
           with:
