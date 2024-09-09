@@ -48,7 +48,6 @@ before-build = "sh copy_so_linux.sh"
 archs = ["x86_64"]
 skip = ["pp*", "*-musllinux_x86_64"]
 repair-wheel-command = """
-    export LD_LIBRARY_PATH=/project/braintaichi:$LD_LIBRARY_PATH &&
     auditwheel repair -w {dest_dir} {wheel}
 """
 
