@@ -18,7 +18,7 @@ if not os.path.exists(taichi_runtime_lib):
     taichi_runtime_lib = os.path.realpath(taichi_runtime_lib)
 
 
-taichi_lib_target_dir ='project/brainpylib'
+taichi_lib_target_dir ='project/braintaichi'
 
 env_script_path = '/project/set_env.sh'
 # if not os.path.isfile(env_script_path):

@@ -8,7 +8,7 @@ python copy_so_linux.py
 dir /project
 if [ -s set_env.sh ]; then
     source /project/set_env.sh
-    cp "$taichi_runtime_lib_dir"/libtaichi_c_api.so /project/brainpylib/
+    cp "$taichi_runtime_lib_dir"/libtaichi_c_api.so /project/braintaichi/
 else
     echo "Environment setup script 'set_env.sh' is missing or empty."
     exit 1
