@@ -13,7 +13,7 @@ on:
 jobs:
     # Define test jobs as part of the publish workflow
     test_linux:
-        name: Build and Test on Linux
+        name: Test on Linux
         runs-on: ubuntu-latest
         strategy:
             fail-fast: false
@@ -100,7 +100,7 @@ jobs:
     #             path: dist/*.whl
     #             retention-days: 20
     build_and_test_macos_arm:
-        name: Build and Test on macOS
+        name: Build and Test on macOS(ARM)
         runs-on: macos-latest
         strategy:
             fail-fast: false
