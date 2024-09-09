@@ -137,36 +137,36 @@ jobs:
                 pip install dist/*.whl
                 pytest tests/
 
-    build_macos_x86:
-        name: Build on macOS(x86)
-        runs-on: macos-latest
-        needs: [build_and_test_macos_arm]
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4
-            - name: Set up Python 3.9
-              uses: actions/setup-python@v5
-              with:
-                python-version: 3.9
-            - name: Install dependencies
-              run: |
-                python -m pip cache purge
-                python -m pip install --upgrade pip setuptools --no-cache-dir
-                python -m pip install -r requirements-dev.txt --no-cache-dir
-                python -m pip install setuptools==68.2.0
-                pip install cibuildwheel
-            - name: Build Wheel
-              run: |
-                sh copy_pyproject_mac_x86_64.sh
-                cibuildwheel --platform macos
-                mkdir dist
-                cp wheelhouse/*.whl dist/
-            - name: Archive Wheel Artifacts
-              uses: actions/upload-artifact@v3
-              with:
-                name: dist-macos-x86
-                path: dist/*.whl
-                retention-days: 20
+    # build_macos_x86:
+    #     name: Build on macOS(x86)
+    #     runs-on: macos-latest
+    #     needs: [build_and_test_macos_arm]
+    #     steps:
+    #         - name: Checkout
+    #           uses: actions/checkout@v4
+    #         - name: Set up Python 3.9
+    #           uses: actions/setup-python@v5
+    #           with:
+    #             python-version: 3.9
+    #         - name: Install dependencies
+    #           run: |
+    #             python -m pip cache purge
+    #             python -m pip install --upgrade pip setuptools --no-cache-dir
+    #             python -m pip install -r requirements-dev.txt --no-cache-dir
+    #             python -m pip install setuptools==68.2.0
+    #             pip install cibuildwheel
+    #         - name: Build Wheel
+    #           run: |
+    #             sh copy_pyproject_mac_x86_64.sh
+    #             cibuildwheel --platform macos
+    #             mkdir dist
+    #             cp wheelhouse/*.whl dist/
+    #         - name: Archive Wheel Artifacts
+    #           uses: actions/upload-artifact@v3
+    #           with:
+    #             name: dist-macos-x86
+    #             path: dist/*.whl
+    #             retention-days: 20
 
 
     build_and_test_windows:
@@ -207,7 +207,7 @@ jobs:
     publish_pypi:
         name: Upload release to PyPI
         runs-on: ubuntu-latest
-        needs: [build_linux_cpu, build_and_test_macos_arm, build_macos_x86, build_and_test_windows]
+        needs: [build_linux_cpu, build_and_test_macos_arm, build_and_test_windows]
         permissions:
             id-token: write
             contents: write
@@ -233,11 +233,11 @@ jobs:
             name: dist-macos-arm
             path: dist/
 
-        - name: Download macOS(x86) Artifacts
-          uses: actions/download-artifact@v3
-          with:
-            name: dist-macos-x86
-            path: dist/
+        # - name: Download macOS(x86) Artifacts
+        #   uses: actions/download-artifact@v3
+        #   with:
+        #     name: dist-macos-x86
+        #     path: dist/
 
         - name: Download Windows Artifacts
           uses: actions/download-artifact@v3
