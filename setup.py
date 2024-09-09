@@ -29,7 +29,7 @@ __minimal_taichi_version = (1, 7, 2)
 try:
     import taichi as ti
 
-    if ti.__version__ == __minimal_taichi_version:
+    if ti.__version__ < __minimal_taichi_version:
         raise ModuleNotFoundError
 except ModuleNotFoundError:
     taichi_installed = 'taichi' in globals()
