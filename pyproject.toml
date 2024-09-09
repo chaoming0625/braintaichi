@@ -21,7 +21,7 @@ test-extras = []
 
 container-engine = "docker"
 
-manylinux-x86_64-image = "manylinux2014"
+manylinux-x86_64-image = "manylinux_2_27"
 
 [build-system]
 requires = [
