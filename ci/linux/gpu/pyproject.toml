@@ -21,7 +21,7 @@ test-extras = []
 
 container-engine = "docker"
 
-manylinux-x86_64-image = "manylinux_2_28"
+manylinux-x86_64-image = "manylinux2014"
 
 [build-system]
 requires = [
@@ -42,7 +42,7 @@ name = "braintaichi"
 version = "0.0.1"
 
 [tool.cibuildwheel.linux]
-# before-all = "sh prepare_build_wheel_on_cuda.sh"
+before-all = "sh prepare_build_wheel_on_cuda.sh"
 before-build = "sh copy_so_linux.sh"
 #before-build = "pip install -r requirements-test.txt"
 archs = ["x86_64"]

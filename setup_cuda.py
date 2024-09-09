@@ -165,7 +165,7 @@ setup(
     },
     install_requires=['brainunit', 'brainstate', 'jax', 'jaxlib', 'taichi'],
     extras_require={"test": "pytest"},
-    python_requires='>=3.9',
+    python_requires='>=3.8',
     url='https://github.com/chaoming0625/braintaichi',
     ext_modules=[
         Extension("gpu_ops",
