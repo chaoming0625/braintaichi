@@ -133,17 +133,17 @@ jobs:
           uses: actions/download-artifact@v3
           with:
             name: dist-linux
-            path: dist/linux/
+            path: dist
         - name: Download macOS Artifacts
           uses: actions/download-artifact@v3
           with:
             name: dist-macos
-            path: dist/macos/
+            path: dist
         - name: Download Windows Artifacts
           uses: actions/download-artifact@v3
           with:
             name: dist-windows
-            path: dist/windows/
+            path: dist/
         - name: Publish to PyPI
           uses: pypa/gh-action-pypi-publish@release/v1
           with:
