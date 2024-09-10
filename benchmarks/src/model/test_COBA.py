@@ -17,7 +17,7 @@ EventJitFPNormalLinear_brainpylib = partial(EventJitFPNormalLinear, method='brai
 EventJitFPNormalLinear_taichi = partial(EventJitFPNormalLinear, method=None)
 
 
-bm.set_platform('cpu')
+bm.set_platform('gpu')
 bm.disable_gpu_memory_preallocation()
 
 post_nums = [400, 4000, 40000, 400000, 4000000]

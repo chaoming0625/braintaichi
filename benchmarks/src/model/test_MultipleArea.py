@@ -15,7 +15,7 @@ from scipy.io import loadmat
 from multiple_area_customized_op import (multiple_area_customized_op_E as syn_fun_E,
                                           multiple_area_customized_op_I as syn_fun_I)
 
-bm.set_platform('cpu')
+bm.set_platform('gpu')
 bm.disable_gpu_memory_preallocation()
 
 PATH = os.path.dirname(os.path.abspath(__file__))

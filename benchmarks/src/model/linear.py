@@ -630,10 +630,11 @@ class EventCSRLinear(_CSRLayer):
   def update(self, x):
     if x.ndim == 1:
       if self.method is None:
-        event_csrmv = bm.event.csrmv_taichi
+        return bm.event.csrmv_taichi(self.weight, self.indices, self.indptr, x,
+                            shape=(self.conn.pre_num, self.conn.post_num),
+                            transpose=self.transpose,)[0]
       else:
-        event_csrmv = bm.event.csrmv
-      return event_csrmv(self.weight, self.indices, self.indptr, x,
+        return bm.event.csrmv(self.weight, self.indices, self.indptr, x,
                             shape=(self.conn.pre_num, self.conn.post_num),
                             transpose=self.transpose,)
     elif x.ndim > 1:
@@ -646,10 +647,11 @@ class EventCSRLinear(_CSRLayer):
 
   def _batch_csrmv(self, x):
     if self.method is None:
-        event_csrmv = bm.event.csrmv_taichi
+        return bm.event.csrmv_taichi(self.weight, self.indices, self.indptr, x,
+                          shape=(self.conn.pre_num, self.conn.post_num),
+                          transpose=self.transpose,)[0]
     else:
-        event_csrmv = bm.event.csrmv
-    return event_csrmv(self.weight, self.indices, self.indptr, x,
+        return bm.event.csrmv(self.weight, self.indices, self.indptr, x,
                           shape=(self.conn.pre_num, self.conn.post_num),
                           transpose=self.transpose,)
 
