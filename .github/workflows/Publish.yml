@@ -1,8 +1,10 @@
 name: Publish to PyPI.org(CPU)
 
 on:
-    schedule:
-    - cron: '0 20 * * *'  # GMT 20 == GMT+8 04
+    # schedule:
+    # - cron: '0 20 * * *'  # GMT 20 == GMT+8 04
+    release:
+        types: [published]
     workflow_dispatch:
         # Manually trigger the release workflow, a version must be provided
         inputs:
