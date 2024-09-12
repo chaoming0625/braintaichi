@@ -74,21 +74,21 @@ mv setup_cuda.py setup.py
 
 # yum install --disableplugin=fastmirror -y python3-devel.x86_64
 
-sudo apt-get update
-sudo apt-get install -y wget
+apt-get update
+apt-get install -y wget
 
 wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
-sudo mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
-sudo apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub
-sudo add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/ /"
+mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
+apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub
+add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/ /"
 
-sudo apt-get update
+apt-get update
 
-sudo apt-get install -y cuda-drivers-525 cuda-nvcc-12-0 cuda-cudart-dev-12-0
-sudo apt-get install -y libc6-dev
-sudo apt-get install -y python3-dev
+apt-get install -y cuda-drivers-525 cuda-nvcc-12-0 cuda-cudart-dev-12-0
+apt-get install -y libc6-dev
+apt-get install -y python3-dev
 
-sudo ln -s /usr/local/cuda-12.0 /usr/local/cuda
+ln -s /usr/local/cuda-12.0 /usr/local/cuda
 
 pip_config_dir="${HOME}/.pip"
 pip_config_file="${pip_config_dir}/pip.conf"
