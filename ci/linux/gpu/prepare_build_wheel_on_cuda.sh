@@ -19,7 +19,7 @@ yum install --setopt=obsoletes=0 -y \
    
 ln -s cuda-12.4 /usr/local/cuda
 
-yum install glibc-devel
+# yum install glibc-devel
 
 yum install --disableplugin=fastmirror -y python3-devel.x86_64
 
