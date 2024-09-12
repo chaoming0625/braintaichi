@@ -39,10 +39,10 @@ build-backend = "setuptools.build_meta"
 [project]
 requires-python = ">=3.8, <=3.12"
 name = "braintaichi"
-version = "0.0.1"
+version = "0.0.1.post20240912"
 
 [tool.cibuildwheel.linux]
-# before-all = "sh prepare_build_wheel_on_cuda.sh"
+before-all = "sh ci/linux/gpu/prepare_build_wheel_on_cuda.sh"
 before-build = "sh copy_so_linux.sh"
 #before-build = "pip install -r requirements-test.txt"
 archs = ["x86_64"]

@@ -3,6 +3,7 @@
 
 import glob
 import os
+import io
 import platform
 import re
 import subprocess
@@ -62,6 +63,10 @@ os.environ.update(
 
 HERE = os.path.dirname(os.path.realpath(__file__))
 
+# obtain long description from README
+here = os.path.abspath(os.path.dirname(__file__))
+with io.open(os.path.join(here, 'README.md'), 'r', encoding='utf-8') as f:
+    README = f.read()
 
 # This custom class for building the extensions uses CMake to compile. You
 # don't have to use CMake for this task, but I found it to be the easiest when
@@ -156,6 +161,8 @@ setup(
     name='braintaichi',
     version=__version__,
     description='Leveraging Taichi Lang to customize brain dynamics operators',
+    long_description=README,
+    long_description_content_type="text/markdown",
     author='BrainTaichi Developers',
     author_email='chao.brain@qq.com',
     packages=find_namespace_packages(exclude=['lib*', 'docs*', 'tests*', 'win_dll*', 'out*', 'cmake*', 'scripts*']),
