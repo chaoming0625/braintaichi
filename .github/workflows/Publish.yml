@@ -58,8 +58,6 @@ jobs:
                 pip install cibuildwheel
             - name: Build Wheel
               run: |
-                rm -rf setup.py
-                cp setup_cuda.py setup.py
                 cibuildwheel --platform linux
                 mkdir dist
                 cp wheelhouse/*.whl dist/

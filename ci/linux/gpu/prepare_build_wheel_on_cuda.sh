@@ -63,16 +63,29 @@ mv setup_cuda.py setup.py
 # yum install -y python3-devel.x86_64
 
 # Install CUDA 12.0
-yum-config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/cuda-rhel7.repo
-yum install --setopt=obsoletes=0 -y \
-   cuda-drivers-525.147.05-1.x86_64 \
-   cuda-nvcc-12-0-12.0.140-1 \
-   cuda-cudart-devel-12-0-12.0.146-1 
-ln -s cuda-12.0 /usr/local/cuda
+# yum-config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/cuda-rhel7.repo
+# yum install --setopt=obsoletes=0 -y \
+#    cuda-drivers-525.147.05-1.x86_64 \
+#    cuda-nvcc-12-0-12.0.140-1 \
+#    cuda-cudart-devel-12-0-12.0.146-1 
+# ln -s cuda-12.0 /usr/local/cuda
 
-yum install glibc-devel
+# yum install glibc-devel
 
-yum install --disableplugin=fastmirror -y python3-devel.x86_64
+# yum install --disableplugin=fastmirror -y python3-devel.x86_64
+
+get https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
+sudo mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
+sudo apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub
+sudo add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/ /"
+
+sudo apt-get update
+
+sudo apt-get install -y cuda-drivers-525 cuda-nvcc-12-0 cuda-cudart-dev-12-0
+sudo apt-get install -y libc6-dev
+sudo apt-get install -y python3-dev
+
+sudo ln -s /usr/local/cuda-12.0 /usr/local/cuda
 
 pip_config_dir="${HOME}/.pip"
 pip_config_file="${pip_config_dir}/pip.conf"
