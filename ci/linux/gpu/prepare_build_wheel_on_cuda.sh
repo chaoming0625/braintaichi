@@ -12,11 +12,13 @@ yum -y install yum-utils
 
 # Install CUDA 12.0
 yum-config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/cuda-rhel7.repo
+
 yum install --setopt=obsoletes=0 -y \
-   cuda-drivers-525.147.05-1.x86_64 \
-   cuda-nvcc-12-0-12.0.140-1 \
-   cuda-cudart-devel-12-0-12.0.146-1 
-ln -s cuda-12.0 /usr/local/cuda
+   cuda-drivers-550.90.07-1.x86_64 \
+   cuda-nvcc-12-4-12.4.131-1 \
+   cuda-cudart-devel-12-4-12.4.127-1 \
+   --skip-broken
+ln -s cuda-12.4 /usr/local/cuda
 
 yum install glibc-devel
 
