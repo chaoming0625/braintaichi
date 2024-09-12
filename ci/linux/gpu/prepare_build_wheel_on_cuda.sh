@@ -21,7 +21,7 @@ ln -s cuda-12.4 /usr/local/cuda
 
 # yum install glibc-devel
 
-yum install --disableplugin=fastmirror -y python3-devel.x86_64
+yum install -y python3-devel
 
 pip_config_dir="${HOME}/.pip"
 pip_config_file="${pip_config_dir}/pip.conf"
