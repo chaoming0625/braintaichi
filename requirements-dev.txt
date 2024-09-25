@@ -1,7 +1,7 @@
 -r requirements.txt
 
 # wheel build requirements
-setuptools==75.1.0
+setuptools
 wheel
 
 # test requirements
